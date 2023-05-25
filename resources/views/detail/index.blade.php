@@ -41,11 +41,14 @@
                             <div class="mt-4 mb-3"> <h5 class="text-uppercase text-muted brand">stok : {{ $product->stok }}</h5>
                                 <h2 class="text-uppercase">{{ $product->name }}</h2>
                                 <div class="lokasi d-flex flex-row align-items-center">
-                                    <h2 class="lokasi">{{ $product->discount ?? 'no discount'}} </h2>
-                                    <div class="ml-2">
-                                      <h2>,{{$product->harga }}</h2>
-                                </div>
+                                  <p>harga : {{$product->harga }}, </p>
+                                    <p class="lokasi"> discount : {{ $product->discount ?? 'no discount'}} </p>
                             </div>
+                            @if ($product->discount)
+                            <p>Discounted price: ${{ $discountedPrice }}</p>
+                            {{-- @else
+                            {{$product->harga }} --}}
+                            @endif
                             <h5 class="text-bottom">Category : {{$product->subCategory->name ?? 'None' }} </h5>
                             <form action="{{ route('addtocart') }}" method="POST">
                               @csrf

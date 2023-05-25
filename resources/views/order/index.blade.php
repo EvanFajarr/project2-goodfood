@@ -43,7 +43,7 @@
                                 <label for="item"  class="col-sm-2 col-form-label">item</label>
                                 <div class="col-sm-10"  name="item" >
                                   <input type="text" name="item" class="form-control"
-                                   value=" @foreach ($product as $data){{ $data->product->name }}-{{ $data->product->harga }},  @endforeach" readonly >    
+                                   value=" @foreach ($product as $data){{ $data->product->name }},  @endforeach" readonly >    
                                 </div>
                             </div>
                             <div class="mb-3 row">
@@ -54,8 +54,10 @@
                               @if(!empty($product))
                               @foreach ($product as $data => $value)
                               @php
-                              $total = $total + str_replace(".","",str_replace(",00","",str_replace('Rp ', '' , (int)$value->product->harga)))
-                          @endphp
+                              $discount = $value->product->discount;
+                                $discountedPrice =(int)$value->product->harga - ((int)$discount / 100 * (int)$value->product->harga) ;
+                                $total = $total + str_replace(".","",str_replace(",00","",str_replace('Rp ', '' , (int)$discountedPrice)))
+                         @endphp
                                   
                                 @endforeach
                                 @endif
@@ -85,8 +87,10 @@
                                   @if(!empty($product))
                                   @foreach ($product as $data => $value)
                                   @php
-                                  $total = $total + str_replace(".","",str_replace(",00","",str_replace('Rp ', '' , (int)$value->product->harga)))
-                              @endphp
+                                  $discount = $value->product->discount;
+                                    $discountedPrice =(int)$value->product->harga - ((int)$discount / 100 * (int)$value->product->harga) ;
+                                    $total = $total + str_replace(".","",str_replace(",00","",str_replace('Rp ', '' , (int)$discountedPrice)))
+                             @endphp
                                       
                                     @endforeach
                                   @else

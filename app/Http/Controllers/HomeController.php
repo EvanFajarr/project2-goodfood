@@ -16,10 +16,12 @@ class HomeController extends Controller
 
     public function detail($id){
         $product = product::find($id);
+        $discount = $product->discount;
+        $discountedPrice =(int)$product->harga - ((int)$discount / 100 * (int)$product->harga) ;
         if(!$product) abort(404);
         $images = $product->image;
      
-        return view('detail.index',compact('product','images'));
+        return view('detail.index',compact('product','images','discountedPrice'));
      
     }
 }

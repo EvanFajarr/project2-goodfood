@@ -22,7 +22,7 @@ class ProductController extends Controller
     {
         
         $product=product::all();
-        return view('product.index')->with('product',$product);
+        return view('product.index',compact('product'));
     }
 
     /**
@@ -33,7 +33,6 @@ class ProductController extends Controller
     public function create()
     {
         $data = subCategory::all();
-
         return view('product.create', compact('data'));
     }
 
@@ -45,8 +44,6 @@ class ProductController extends Controller
      */
     public function store(Request $req)
     {
-      
-
         $product = $req->validate([
             'harga' => 'required|numeric',
             'name' => 'required|unique:product',
@@ -56,20 +53,23 @@ class ProductController extends Controller
             'slug'          => 'nullable|min:3|max:255|unique:product',
             'discount'          => 'nullable|min:2|max:255',
             'status' => 'required',
+          
         ]);
-        // $product = [
-        //     'name' => $request->input('name'),
-        //     'slug' => $request->input('slug'),
-        //     'code' => $request->input('code'),
-        //     'status' => $request->input('status'),
-        //     'harga' => $request->input('harga'),
-        //     'stok' => $request->input('stok'),
-        //     'discount' => $request->input('discount'),
-        //     'category_id' => $request->input('category_id'),
 
-        // ];
-    
+        // $product = new product;
+        // $product->name = $req['name'];
+        // $product->slug = $req['slug'];
+        // $product->code = $req['code'];
+        // $product->harga = $req['harga'];
+        // $product->status =  $req['status'];
+        // $product->stok = $req['stok'];
+        // $product->discount = $req['discount'];
+        // $product->category_id = $req['category_id'];
+      
         $new_product = product::create($product);
+        // $discount = $new_product->discount;
+        // $discountedPrice =(int)$new_product->harga - ((int)$discount / 100 * (int)$new_product->harga) ;
+
         if($req->has('images')){
             foreach($req->file('images')as $image){
                 $imageName = $product['name'].'-image-'.time().rand(1,1000).'.'.$image->extension();
@@ -79,7 +79,6 @@ class ProductController extends Controller
                     'image'=>$imageName
                 ]);
             }
-        //   $harga =(int) $req->harga-($req->harga * $req->discount/100 );
         }
        
         return back()->with('success','Added');

@@ -17,12 +17,19 @@
                       @if(!empty($product))
                         @foreach ($product as $data => $value)
                         @php
-                            $total = $total + str_replace(".","",str_replace(",00","",str_replace('Rp ', '' , (int)$value->product->harga)))
+                        
                         @endphp
                         <div class="row">
                           <div class="col-5">
                             <h4>{{$value->product->name}}</h4>
                             <p>Price  : {{$value->product->harga}}</p>
+                            <p>Price  : {{$value->product->discount}}</p>
+                            @php
+                            $discount = $value->product->discount;
+                              $discountedPrice =(int)$value->product->harga - ((int)$discount / 100 * (int)$value->product->harga) ;
+                              $total = $total + str_replace(".","",str_replace(",00","",str_replace('Rp ', '' , (int)$discountedPrice)))
+                       @endphp
+                           <p>Final Price : {{ $discountedPrice }}</p>
                             <hr>
                           </div>
                           <div class="col">

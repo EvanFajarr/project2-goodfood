@@ -47,9 +47,10 @@
                         <tr>
                             <th class="col-md-1">nama</th>
                             <th class="col-md-1">category</th>
-                            <th class="col-md-1">harga</th>
                             <th class="col-md-1">stok</th>
                             <th class="col-md-1">discount</th>
+                            <th class="col-md-1">harga</th>
+                            <th class="col-md-1">finaal price</th>
                             <th class="col-md-2">Aksi</th>
                         </tr>
                     </thead>
@@ -60,13 +61,14 @@
                         <tr>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->subCategory->name ?? 'None' }}</td>
-                          
-                     
-                            <td>{{ $item->harga }}</td>
-                        
                             <td>{{ $item->stok }}</td>
                             <td>{{ $item->discount ?? 'no discount' }}</td>
-                          
+                            @php
+                                 $discount = $item->discount;
+                                   $discountedPrice =(int)$item->harga - ((int)$discount / 100 * (int)$item->harga) ;
+                            @endphp
+                               <td>{{ $item->harga }}</td>
+                            <td> {{ $discountedPrice }}</td>
                             <td>
                                 <a href={{route('product.images',$item->id)}} class="btn btn-outline-dark"><i class="bi bi-eye"></i></a>
                                 <a href= '{{url('product/'.$item->id.'/edit')}}'  class="btn btn-warning btn-sm"><i class="bi bi-pen"></i></a>
@@ -79,6 +81,7 @@
                         </tr>
                        @endif
                         @endforeach
+                     
                     </tbody>
                 </table>
 

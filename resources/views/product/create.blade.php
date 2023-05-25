@@ -2,7 +2,6 @@
 
 @extends('template.admin')
 @section('name')
-  
 
 
 <form method="post" action="/product/create" enctype="multipart/form-data">
@@ -31,7 +30,7 @@
         <div class="mb-3 row">
             <label for="harga" class="col-sm-2 col-form-label">harga</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" value="{{Session::get('harga')}}"  name='harga'id="harga">
+                <input type="text" class="form-control" value="{{Session::get('harga')}}" onkeyup="sum();"  name='harga'id="harga">
             </div>
         </div>
         
@@ -45,7 +44,7 @@
         <div class="mb-3 row">
             <label for="discount" class="col-sm-2 col-form-label">discount</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" value="{{Session::get('discount')}}"  name='discount'id="discount">
+                <input type="text" class="form-control" value="{{Session::get('discount')}}" onkeyup="sum();"    name='discount'id="discount">
             </div>
         </div>
 
@@ -62,7 +61,14 @@
             </div>
         </div>
     
+        {{-- <div class="mb-3 row">
+            <label for="total" class="col-sm-2 col-form-label">total</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" value="{{Session::get('total')}}"  onkeyup="sum();"    name='total'id="total">
+            </div>
+        </div> --}}
 
+       
 
         {{-- <div class="mb-3 row">
             <label for="image" class="col-sm-2 col-form-label">image</label>
@@ -97,6 +103,16 @@
 </div>
 
 </form>
+{{-- <script>
+    function sum() {
+        var harga = document.getElementById('harga').value;
+        var discount = document.getElementById('discount').value;
+        var result = parseFloat(hargabarang)  - parseFloat(discount);
+        if (!isNaN(result)) {
+            document.getElementById('total').value = result;
+        }
+    }
+</script> --}}
 
 @endsection
 
