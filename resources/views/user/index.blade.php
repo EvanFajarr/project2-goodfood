@@ -26,9 +26,11 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th class="col-md-4">nama</th>  
-                            <th class="col-md-4">email</th>      
-                            <th class="col-md-4">action</th>
+                            <th class="col-md-2">nama</th>  
+                            <th class="col-md-2">email</th>      
+                            <th class="col-md-2">alamat</th>  
+                            <th class="col-md-2">no</th>      
+                            <th class="col-md-2">action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,10 +41,12 @@
                         
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->email }}</td>
+                            <td>{{ $item->alamat }}</td>
+                            <td>{{ $item->no }}</td>
                             <td>
 
-                                <a href= '{{url('user/'.$item->id.'/show')}}'  class="btn btn-warning btn-sm"><i class="bi bi-pen"></i></a>
-                            
+                               <a href= '{{url('user/'.$item->id.'/show')}}'  class="btn btn-warning btn-sm"><i class="bi bi-pen"></i></a>
+                             
                                 <form onsubmit="return confirm('Yakin mau menghapus user?')" class='d-inline' action="{{ url('delete/'.$item->id) }}" method="post">
                                     @csrf 
                                     {{method_field('delete')}}

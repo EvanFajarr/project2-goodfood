@@ -28,7 +28,20 @@
             </div>
         </div>
 
-       
+
+        <div class="mb-3 row">
+            <label for="alamat" class="col-sm-2 col-form-label">alamat</label>
+            <div class="col-sm-10">
+                <input type="alamat" class="form-control"  value="{{Session::get('alamat')}}"   name='alamat'id="alamat">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="no" class="col-sm-2 col-form-label">no</label>
+            <div class="col-sm-10">
+                <input type="no" class="form-control"  value="{{Session::get('no')}}"   name='no'id="no">
+            </div>
+        </div>
    
 
         <div class="mb-3 row">

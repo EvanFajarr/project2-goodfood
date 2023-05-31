@@ -55,6 +55,8 @@ class LoginController extends Controller
           'name' => 'required',
           'email' => 'required|email|unique:users',
           'password' => 'required|min:8',
+          'alamat' => 'required',
+          'no' => 'required|min:11',
       ], [
           'name' => 'Name wajib diisi',
           'email' => 'Email wajib diisi',
@@ -67,6 +69,8 @@ class LoginController extends Controller
       $data = [
           'name' => $request->name,
           'email' => $request->email,
+          'alamat' => $request->alamat,
+          'no' => $request->no,
           'password' => Hash::make($request->password),
       ];
       User::create($data);
@@ -75,7 +79,8 @@ class LoginController extends Controller
           'name' => $request->name,
           'email' => $request->email,
           'password' => $request->password,
-
+          'alamat' => $request->alamat,
+          'no' => $request->no,
       ];
 
       if (Auth::attempt($infologin)) {

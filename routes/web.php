@@ -126,3 +126,12 @@ Route::delete('/hapus/{id}', [OrderController::class, 'destroy']);
 Route::delete('/destroy/{id}', [OrderController::class, 'delete']);
 
 
+
+
+//project 3
+
+Route::get('/detailUser', [UserController::class, 'detail']);
+
+
+Route::get('/editUser', 'App\Http\Controllers\UserController@edit');
+Route::put('/editUser', 'App\Http\Controllers\UserController@edit');

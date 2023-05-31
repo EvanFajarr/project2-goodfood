@@ -23,6 +23,24 @@
                                    
                                 </div>
                             </div>
+                            <div class="my-3 p-3 bg-body rounded shadow-sm">
+                                <div class="mb-3 row">
+                                    <label for="alamat" class="col-sm-2 col-form-label">alamat</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name='alamat' value="{{$user->alamat}}" id="alamat">
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <div class="my-3 p-3 bg-body rounded shadow-sm">
+                                <div class="mb-3 row">
+                                    <label for="no" class="col-sm-2 col-form-label">no telephone</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name='no' value="{{$user->no}}" id="no">
+                                    </div>
+                                   
+                                </div>
+                            </div>
                                 <div class="my-3 p-3 bg-body rounded shadow-sm">
                                     <div class="mb-3 row">
                                         <label for="password" class="col-sm-2 col-form-label">password</label>

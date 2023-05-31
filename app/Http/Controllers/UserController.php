@@ -23,8 +23,7 @@ class UserController extends Controller
         $user = User::where('id', 'like', "%$katakunci%")
             ->orWhere('name', 'like', "%$katakunci%")
             ->orWhere('email', 'like', "%$katakunci%")
-            ->orWhere('role', 'like', "%$katakunci%")
-            ->paginate($baris);
+              ->paginate($baris);
     } else {
         $user= User::orderBy ('id','desc')->paginate($baris);
     }
@@ -42,18 +41,22 @@ class UserController extends Controller
   {
       Session::flash('name', $request->name);
       Session::flash('email', $request->email);
+      Session::flash('alamat', $request->alamat);
+      Session::flash('no', $request->no);
       Session::flash('password', $request->password);
 
       $request->validate([
           'name' => 'required',
           'email' => 'required|email|unique:users',
-         
+          'alamat' => 'required',
+          'no' => 'required|min:11',
           'password' => 'required|min:8',
       ], );
       $user = [
         'name' => $request->name,
         'email' => $request->email,
-      
+        'alamat' => $request->alamat,
+        'no' => $request->no,
         'password' => Hash::make($request->password),
     ];
 
@@ -139,19 +142,63 @@ class UserController extends Controller
     $request->validate([
         'name' => 'required',
         'email' => 'required',
-       
+        'alamat' => 'required',
+        'no' => 'required|min:11',
         'password' => 'nullable|min:8',
     ], );
 
     $user = [
         'name' => $request->name,
         'email' => $request->email,
-      
+        'alamat' => $request->alamat,
+        'no' => $request->no,
         'password' => Hash::make($request->password),
 
     ];
     User::where('id', $id)->update($user);
 
     return redirect('/user')->with('success', 'Berhasil melakukan update data');
+}
+
+
+
+
+
+
+public function detail(){
+    return view('user.detail');
+}
+
+
+public function edit(Request $request){
+    if($request->isMethod('put')){
+        
+        $validate = $request->validate([
+            'name'      => 'required|max:25',
+            'alamat'   => 'required',
+            'email' => 'required',
+            'no'    => 'required|max:20',
+            'password'  => 'nullable|min:8',
+        ]);
+
+        if($validate){
+            if(!empty($request['password'])){
+                $password = Hash::make($request['password']);
+            }else{
+                $password = Auth::user()->password;
+            }
+            $user = User::find(Auth::user()->id);
+            $user->name     = $request['name'];
+            $user->alamat   = $request['alamat'];
+            $user->no       = $request['no'];
+            $user->email       = $request['email'];
+            $user->password = $password;
+            if($user->save()){
+     
+                return redirect('/detailUser')->with('success','Berhasil Update Data User');
+            }
+        }
+    }
+    return view('user.edit');
 }
 }

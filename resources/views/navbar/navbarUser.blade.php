@@ -21,7 +21,7 @@
               <a href="/">Home</a>
               <a href="#product">product</a> 
               @if (Auth::user())
-              <a href="#"> {{ Auth::user()->name }}</a>
+              <a href="/detailUser"> {{ Auth::user()->name }}</a>
               <a href="/cartlist">cart</a> 
               <a href="/orderUser">order</a> 
               @role('admin')

@@ -14,11 +14,23 @@
                 <label for="email" class="form-label">Email</label>
                 <input type="email" name="email" value="{{ Session::get('email') }}"  class="form-control bg-info bg-opacity-10 border border-info">
             </div>
+
+            <div class="mb-3">
+                <label for="alamat" class="form-label">Alamat</label>
+                <input type="alamat" name="alamat" value="{{ Session::get('alamat') }}"  class="form-control bg-info bg-opacity-10 border border-info">
+            </div>
+
+            <div class="mb-3">
+                <label for="no" class="form-label">No</label>
+                <input type="no" name="no" value="{{ Session::get('no') }}"  class="form-control bg-info bg-opacity-10 border border-info">
+            </div>
+
+            
             <div class="mb-3">
                 <label for="password" class="form-label ">Password</label>
                 <input type="password" name="password" class="form-control bg-info bg-opacity-10 border border-info">
             </div>
-                <p class="text-muted">sudah punya akun? <a href="/">login</a></p>
+                <p class="text-muted">sudah punya akun? <a href="/login">login</a></p>
             <div class="d-grid">
                 <button class="btn btn-outline-info" type="submit">Regist</button>
             </div>
