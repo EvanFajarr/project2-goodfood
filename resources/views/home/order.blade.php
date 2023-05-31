@@ -25,7 +25,7 @@
             <p class="card-text">Note : {!! $item->note !!}</p>
             <p class="card-text">Total : {{ $item->total }}</p>
             @if ($item->status == "terkirim")
-                                <form onsubmit="return confirm('Yakin mau menghapus order?')" class='d-inline' action="{{ url('hapus/'.$item->id) }}" method="post">
+                                <form onsubmit="return confirm('Yakin mau menghapus order?')" class='d-inline' action="{{ url('destroy/'.$item->id) }}" method="post">
                                     @csrf 
                                     {{method_field('delete')}}
                                     <button type="submit" name="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3-fill"></i></button>

@@ -1,7 +1,5 @@
 <?php
 
-
-
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CsvController;
@@ -30,7 +28,7 @@ use App\Http\Controllers\SubCategoryController;
 // });
 
 
-Route::middleware(['admin'])->group(function () {
+// Route::middleware(['admin'])->group(function () {
 
 Route::get('/category',[CategoryController::class,'index'])->name('category.index');//category
 Route::get('/category/create',[CategoryController::class,'create'])->name('category.create');
@@ -84,7 +82,17 @@ Route::get('/user', [UserController::class, 'index']);
 Route::get('/user/create', [UserController::class, 'create']);
 Route::post('/user/create', [UserController::class, 'store']);
 Route::delete('/delete/{id}', [UserController::class, 'destroy']);
-});
+
+Route::get('/user/{id}/show', [UserController::class, 'show'])->name('users.show');
+
+Route::put('/user/{id}/show', [UserController::class, 'update'])->name('users.update');
+
+Route::post('/user/{id}/ya', [UserController::class, 'assignRole'])->name('users.roles'); //asignrole in user
+Route::delete('/users/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('users.roles.remove');
+
+Route::post('/user/{id}/show', [UserController::class, 'givePermission'])->name('users.permissions'); //give permision in rolle
+Route::delete('/users/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
+// });
 
 
 
@@ -113,5 +121,8 @@ Route::post('/checkout', [OrderController::class, 'store']);
 Route::get('/orderUser', [OrderController::class, 'user'])->middleware(['session']);
 
 Route::delete('/hapus/{id}', [OrderController::class, 'destroy']);
+
+
+Route::delete('/destroy/{id}', [OrderController::class, 'delete']);
 
 

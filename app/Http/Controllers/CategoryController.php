@@ -10,16 +10,40 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class CategoryController extends Controller
 {
+
+    public function __construct()
+     {
+         $this->middleware('permission:category index', ['only' => ['index']]);
+         $this->middleware('permission:category create', ['only' => ['create', 'store']]);
+         $this->middleware('permission:category edit', ['only' => ['edit', 'update']]);
+         $this->middleware('permission:category delete', ['only' => ['destroy']]);
+     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
       
-        $category= category::orderBy ('id','desc')->get();
-        return view('category.index')->with('category',$category);
+        $category = category::query();
+
+        
+        $category->when($request->name, function ($query) use ($request) {
+            return $query->where('name', 'like', '%'.$request->name.'%');
+        });
+
+        $category->when($request->created_at, function ($query) use ($request) {
+            return $query->where('created_at', 'like', '%'.$request->created_at.'%');
+        });
+       
+
+       
+        $category->when($request->status, function ($query) use ($request) {
+            return $query->whereStatus($request->status);
+        });
+        
+        return view('category.index', ['category' => $category->paginate(10)]);
     }
 
     /**

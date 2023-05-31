@@ -61,22 +61,7 @@
             </div>
         </div>
     
-        {{-- <div class="mb-3 row">
-            <label for="total" class="col-sm-2 col-form-label">total</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" value="{{Session::get('total')}}"  onkeyup="sum();"    name='total'id="total">
-            </div>
-        </div> --}}
-
        
-
-        {{-- <div class="mb-3 row">
-            <label for="image" class="col-sm-2 col-form-label">image</label>
-            <div class="col-sm-10">
-            <input type="file" class="form-control" name="image[]" multiple>
-            </div>
-        </div> --}}
-     
 
         <div class="form-group">
             <label for="files" class="form-label mt-4">Upload Product Images:</label>
@@ -103,16 +88,7 @@
 </div>
 
 </form>
-{{-- <script>
-    function sum() {
-        var harga = document.getElementById('harga').value;
-        var discount = document.getElementById('discount').value;
-        var result = parseFloat(hargabarang)  - parseFloat(discount);
-        if (!isNaN(result)) {
-            document.getElementById('total').value = result;
-        }
-    }
-</script> --}}
+
 
 @endsection
 

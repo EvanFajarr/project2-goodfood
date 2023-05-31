@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('permission:order index', ['only' => ['order']]);
+        $this->middleware('permission:order edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:order delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         return view('order.index', [
@@ -97,12 +106,37 @@ class OrderController extends Controller
 
 
     
-    public function admin(Request $Request)
-    {
+    public function admin(Request $request)
+    { 
+        
+        
+        $order = order::query();
 
-        $order=order::all();
-        return view('order.tampil')->with('order', $order);
+        
+        $order->when($request->name, function ($query) use ($request) {
+            return $query->where('name', 'like', '%'.$request->name.'%');
+        });
 
+
+        $order->when($request->created_at, function ($query) use ($request) {
+            return $query->where('created_at', 'like', '%'.$request->created_at.'%');
+        });
+       
+
+       
+        $order->when($request->status, function ($query) use ($request) {
+            return $query->whereStatus($request->status);
+        });
+        
+        return view('order.tampil', ['order' => $order->paginate(10)]);
+
+    }
+
+
+    public function delete($id){
+        order::where('id', $id)->delete();
+
+        return back()->with('success', 'Berhasil hapus order');
     }
 
 }

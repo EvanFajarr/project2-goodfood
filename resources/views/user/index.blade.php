@@ -28,7 +28,6 @@
                         <tr>
                             <th class="col-md-4">nama</th>  
                             <th class="col-md-4">email</th>      
-                            <th class="col-md-4">rolle</th>
                             <th class="col-md-4">action</th>
                         </tr>
                     </thead>
@@ -40,16 +39,16 @@
                         
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->email }}</td>
-                            <td>{{ $item->role }}</td>
                             <td>
-                                @if ($item->role == "admin")
-                                @else()
+
+                                <a href= '{{url('user/'.$item->id.'/show')}}'  class="btn btn-warning btn-sm"><i class="bi bi-pen"></i></a>
+                            
                                 <form onsubmit="return confirm('Yakin mau menghapus user?')" class='d-inline' action="{{ url('delete/'.$item->id) }}" method="post">
                                     @csrf 
                                     {{method_field('delete')}}
                                     <button type="submit" name="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                                 </form>
-                                @endif
+                               
                             </td>
                         </tr>
                             

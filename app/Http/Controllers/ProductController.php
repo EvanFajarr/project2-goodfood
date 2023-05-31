@@ -13,16 +13,52 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class ProductController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+     public function __construct()
+     {
+         $this->middleware('permission:product index', ['only' => ['index']]);
+         $this->middleware('permission:product create', ['only' => ['create', 'store']]);
+         $this->middleware('permission:product edit', ['only' => ['edit', 'update']]);
+         $this->middleware('permission:product delete', ['only' => ['destroy']]);
+         $this->middleware('permission:view image', ['only' => ['images']]);
+         $this->middleware('permission:create image', ['only' => ['addimage']]);
+         $this->middleware('permission:delete image', ['only' => ['deleteimage']]);
+     }
+ 
+
+    public function index(Request $request)
     {
+        $product = product::query();
+
         
-        $product=product::all();
-        return view('product.index',compact('product'));
+        $product->when($request->name, function ($query) use ($request) {
+            return $query->where('name', 'like', '%'.$request->name.'%');
+        });
+
+        $product->when($request->stok, function ($query) use ($request) {
+            return $query->where('stok', 'like', '%'.$request->stok.'%');
+        });
+
+        $product->when($request->created_at, function ($query) use ($request) {
+            return $query->where('created_at', 'like', '%'.$request->created_at.'%');
+        });
+       
+
+       
+        $product->when($request->status, function ($query) use ($request) {
+            return $query->whereStatus($request->status);
+        });
+        
+        return view('product.index', ['product' => $product->paginate(10)]);
+
+
+     
     }
 
     /**

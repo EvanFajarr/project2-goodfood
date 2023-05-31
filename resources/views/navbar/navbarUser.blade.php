@@ -24,9 +24,9 @@
               <a href="#"> {{ Auth::user()->name }}</a>
               <a href="/cartlist">cart</a> 
               <a href="/orderUser">order</a> 
-              @if (Auth::user()->role == "admin")
-              <a class="dropdown-item" href="/product">Dasboard</a>
-              @endif
+              @role('admin')
+              <a class="dropdown-item" href="/user">Dasboard</a>
+              @endrole
 
                <form action="{{ url('/logout') }}" method="post">
                 @csrf

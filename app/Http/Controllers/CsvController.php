@@ -15,12 +15,18 @@ use Maatwebsite\Excel\Facades\Excel;
 class CsvController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:category export', ['only' => ['export']]);
+        $this->middleware('permission:category import', ['only' => ['import']]);
+        $this->middleware('permission:Subcategory export', ['only' => ['subCategoryexport']]);
+        $this->middleware('permission:Subcategory import', ['only' => ['subCategoryimport']]);
+        $this->middleware('permission:product export', ['only' => ['productexport']]);
+        $this->middleware('permission:product import', ['only' => ['productimport']]);
+        $this->middleware('permission:order export', ['only' => ['orderexport']]);
+    }
 
-
-    // public function importExportView()
-    // {
-    //    return view('category.export');
-    // }
+ 
     public function export()
     {
         return Excel::download(new CategoryExport, 'category.csv');

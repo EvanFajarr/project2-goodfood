@@ -15,42 +15,49 @@
     <div class="sidebar-heading">
         barang
     </div>
+    @can('order index')
     <li class="nav-item">
-        <a class="nav-link {{ Request::is('/*') ? 'active' : '' }}" href="orderList">
+        <a class="nav-link" href="/orderList">
             <i class="fas fa-clipboard-list"></i>
             <span>Order</span>
         </a>
     </li>
+    @endcan
+
     <li class="nav-item">
-        <a class="nav-link {{ Request::is('/*') ? 'active' : '' }}" href="user">
+        <a class="nav-link" href="/user">
             <i class="fas fa-clipboard-list"></i>
             <span>Manage User</span>
         </a>
     </li>
-
+ @can('product index')
     <li class="nav-item">
-        <a class="nav-link {{ Request::is('/*') ? 'active' : '' }}" href="product">
+        <a class="nav-link " href="/product">
             <i class="fas fa-clipboard-list"></i>
             <span>Data produk</span>
         </a>
     </li>
+@endcan
 
 
+@can('category index')
     <li class="nav-item">
-        <a class="nav-link {{ Request::is('/*') ? 'active' : '' }}" href="category">
+        <a class="nav-link" href="/category">
             <i class="fas fa-clipboard-list"></i>
             <span>Category</span>
         </a>
     </li>
+@endcan
 
 
+@can('Subcategory index')
     <li class="nav-item">
-        <a class="nav-link {{ Request::is('/*') ? 'active' : '' }}" href="Subcategory">
+        <a class="nav-link" href="Subcategory">
             <i class="fas fa-clipboard-list"></i>
             <span>Subcategory</span>
         </a>
     </li>
- 
+ @endcan
     <li class="nav-item">
     <form action="{{ url('/logout') }}" method="post">
         @csrf

@@ -5,11 +5,11 @@ namespace App\Models;
 use App\Models\category;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class subCategory extends Model
 {
-    use HasFactory;
+  
     use Sluggable;
 
     protected $fillable = ['parent_id','name','code','slug','status'];

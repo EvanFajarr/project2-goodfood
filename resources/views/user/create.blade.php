@@ -38,14 +38,7 @@
             </div>
         </div>
 
-        <div class="mb-3 row">
-            <label for="role" class="form-label">rolle</label>
-            <select type="text" name="role"  name="role" id="role"  class="form-control">
-            <option >user</option>
-            <option >admin</option>
-          </select>  
-        </div>
-
+       
 
     
     <div class="mb-3 row">

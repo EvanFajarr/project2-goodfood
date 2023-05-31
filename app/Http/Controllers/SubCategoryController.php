@@ -10,15 +10,43 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class SubCategoryController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('permission:Subcategory index', ['only' => ['index']]);
+        $this->middleware('permission:Subcategory create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Subcategory edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Subcategory delete', ['only' => ['destroy']]);
+    }
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $subCategory= subCategory::orderBy ('id','desc')->get();
-        return view('subCategory.index')->with('subCategory',$subCategory);
+    public function index(Request $request)
+     {
+
+    $subCategory = subCategory::query();
+
+        
+        $subCategory->when($request->name, function ($query) use ($request) {
+            return $query->where('name', 'like', '%'.$request->name.'%');
+        });
+
+        $subCategory->when($request->created_at, function ($query) use ($request) {
+            return $query->where('created_at', 'like', '%'.$request->created_at.'%');
+        });
+       
+
+       
+        $subCategory->when($request->status, function ($query) use ($request) {
+            return $query->whereStatus($request->status);
+        });
+        
+        return view('subCategory.index', ['subCategory' => $subCategory->paginate(10)]);
     }
 
     /**

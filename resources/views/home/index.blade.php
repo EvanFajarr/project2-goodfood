@@ -234,7 +234,17 @@
           </div>
           <div class="card-details text-center pt-4">
               <h6 class="m-0 pb-1">Stok : {{ $item->stok }}</h6>
-              <p> Harga : {{ $item->harga }}, Discount : {{ $item->discount ?? 'no discount' }} </p>
+              {{-- <p> Harga : {{ $item->harga }}, Discount : {{ $item->discount ?? 'no discount' }}    </p> --}}
+              @php
+              $discount = $item->discount;
+                $discountedPrice =(int)$item->harga - ((int)$discount / 100 * (int)$item->harga) ;
+         @endphp
+          @if ($item->discount)
+          <p>Harga : {{ $discountedPrice }},
+          Discount : {{ $item->discount ?? 'no discount' }}  </p>
+          @else
+          <p>Harga : {{$item->harga }}   {{ $item->discount ?? 'no discount' }}</p>
+          @endif
               <div class="btn-group">
                 <a href={{route('images',$item->id)}} class="btn btn-outline-dark me-2"><i class="bi bi-eye"></i></a>
                 

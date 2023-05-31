@@ -23,7 +23,7 @@
                           <div class="col-5">
                             <h4>{{$value->product->name}}</h4>
                             <p>Price  : {{$value->product->harga}}</p>
-                            <p>Price  : {{$value->product->discount}}</p>
+                            <p>Discount  : {{$value->product->discount}}</p>
                             @php
                             $discount = $value->product->discount;
                               $discountedPrice =(int)$value->product->harga - ((int)$discount / 100 * (int)$value->product->harga) ;

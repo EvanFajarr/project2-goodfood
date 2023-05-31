@@ -45,7 +45,7 @@
                                     <p class="lokasi"> discount : {{ $product->discount ?? 'no discount'}} </p>
                             </div>
                             @if ($product->discount)
-                            <p>Discounted price: ${{ $discountedPrice }}</p>
+                            <p>Final price: {{ $discountedPrice }}</p>
                             {{-- @else
                             {{$product->harga }} --}}
                             @endif

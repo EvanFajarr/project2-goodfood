@@ -4,18 +4,54 @@
 
 @include('pesan.pesan')
 
-        
+{{-- <div class="pb-3">
+    <form class="d-flex" action="{{'category'}}" method="get">
+        <input class="form-control me-1" type="search" name="katakunci" value="{{ Request::get('katakunci') }}" placeholder="Search" aria-label="Search">
+        <button class="btn btn-secondary" type="submit">Search</button>
+    </form>
+  </div> --}}
+
+  <form action="/category" method="get">
+    @csrf
+    <div class="row mb-3">
+        <div class="col-sm-3">
+            <label for="" class="form-label">Name</label>
+            <input name="name" type="text" class="form-control" placeholder="Name" value="{{isset($_GET['name']) ? $_GET['name'] : ''}}">  
+        </div>
+
+        <div class="col-sm-3">
+            <label for="" class="form-label">Crated at</label>
+            <input name="created_at" type="date" class="form-control" placeholder="created_at" value="{{isset($_GET['created_at']) ? $_GET['created_at'] : ''}}">  
+        </div>
+       
+        <div class="col-sm-3">
+            <label for="" class="form-label">status</label>
+            <select name="status" class="form-select">
+                <option value="pending">pending</option>
+                <option value="post">post</option>
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <button type="submit" class="btn btn-outline-primary mt-4">Search</button>
+        </div>
+    </div>
+</form>
         <!-- START DATA -->
         <div class="my-3 p-3 bg-body rounded shadow-sm">
                 <!-- TOMBOL TAMBAH DATA -->
                 <div class="pb-3">
+                    @can('category create')
                     <a href='{{url('category/create')}}' class="btn btn-primary"><i class="bi bi-cloud-plus-fill"></i></a>
+                    @endcan
+                    @can('category export')
                     <a href="{{ url('/export') }}" class="btn btn-success"><i class="bi bi-filetype-csv"></i></a>
+                    @endcan
                     {{-- <button class="btn btn-info"><i class="bi bi-file-earmark-arrow-up-fill"></i></button>
                     <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="file" class="form-control mt-3">
                     </form> --}}
+                    @can('category import')
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <i class="bi bi-file-earmark-arrow-up-fill"></i>
                         </button>
@@ -40,6 +76,7 @@
                         </div>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
                 </div>
+                @endcan
 
                
           
@@ -65,12 +102,16 @@
                             <td>{{$item->code}}</td>
                             <td>{{$item->status}}</td>
                             <td>
+                                @can('category edit')
                                 <a href= '{{url('category/'.$item->code.'/edit')}}'  class="btn btn-warning btn-sm"><i class="bi bi-pen"></i></a>
-                                <form onsubmit="return confirm('Yakin mau menghapus data?')" class='d-inline' action="{{ url('category/'.$item->code) }}" method="post">
+                               @endcan
+                               @can('category delete')
+                               <form onsubmit="return confirm('Yakin mau menghapus data?')" class='d-inline' action="{{ url('category/'.$item->code) }}" method="post">
                                 @csrf 
                                 @method('DELETE')
                                 <button type="submit" name="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                             </form>
+                            @endcan
                             </td>
                         </tr>
                @endif
@@ -104,12 +145,16 @@
                             <td>{{$item->code}}</td>
                             <td>{{$item->status}}</td>
                             <td>
+                                @can('category edit')
                                 <a href= '{{url('category/'.$item->code.'/edit')}}'  class="btn btn-warning btn-sm"><i class="bi bi-pen"></i></a>
+                                @endcan
+                                @can('category delete')
                                 <form onsubmit="return confirm('Yakin mau menghapus data?')" class='d-inline' action="{{ url('category/'.$item->code) }}" method="post">
                                 @csrf 
                                 @method('DELETE')
                                 <button type="submit" name="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                             </form>
+                            @endcan
                             </td>
                         </tr>
                @endif
