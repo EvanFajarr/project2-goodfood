@@ -56,7 +56,28 @@
             </div>
         </div>
 
-     
+        @if ($product->foto)
+        <div class="mb-3">
+            <img style="max-width:300px;max-height:300px" src="{{ url('foto').'/'.$product->foto }}"/>
+        </div>
+    @endif
+    <div class="mb-3 row">
+        <label for="foto" class="col-sm-2 col-form-label">Cover</label>
+        <div class="col-sm-10">
+        <input type="file" class="form-control" name="foto" id="foto">
+        </div>
+    </div>
+
+        <div class="mb-3 row">
+            <label for="desc" class="col-sm-2 col-form-label">desc</label>
+            <div class="col-sm-10">
+                <textarea   class="form-control  summernote" name="desc"  id="desc">
+
+                    {{ $product->desc }}
+                </textarea>
+            </div>
+        </div>
+
 
 
 

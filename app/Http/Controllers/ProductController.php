@@ -80,7 +80,9 @@ class ProductController extends Controller
      */
     public function store(Request $req)
     {
-        $product = $req->validate([
+
+
+         $req->validate([
             'harga' => 'required|numeric',
             'name' => 'required|unique:product',
             'category_id' => 'required',
@@ -88,24 +90,33 @@ class ProductController extends Controller
             'stok'      => 'required|min:1',
             'slug'          => 'nullable|min:3|max:255|unique:product',
             'discount'          => 'nullable|min:2|max:255',
+            'desc'          => 'nullable',
             'status' => 'required',
-          
+             'foto' => 'required|image|file|max:10000',
         ]);
 
-        // $product = new product;
-        // $product->name = $req['name'];
-        // $product->slug = $req['slug'];
-        // $product->code = $req['code'];
-        // $product->harga = $req['harga'];
-        // $product->status =  $req['status'];
-        // $product->stok = $req['stok'];
-        // $product->discount = $req['discount'];
-        // $product->category_id = $req['category_id'];
-      
-        $new_product = product::create($product);
-        // $discount = $new_product->discount;
-        // $discountedPrice =(int)$new_product->harga - ((int)$discount / 100 * (int)$new_product->harga) ;
+        $foto_file = $req->file('foto');
+        $foto_ekstensi = $foto_file->extension();
+        $foto_nama = date('ymdhis').'.'.$foto_ekstensi;
+        $foto_file->move(public_path('foto'), $foto_nama);
 
+        $product = [
+            'harga' => $req->input('harga'),
+            'name' => $req->input('name'),
+            'category_id' => $req->input('category_id'),
+            'desc' => $req->input('desc'),
+            'foto' => $foto_nama,
+            'discount' => $req->input('discount'),
+            'stok' => $req->input('stok'),
+            'slug' => $req->input('slug'),
+            'status' => $req->input('status'),
+            'code' => $req->input('code'),
+        ];
+      
+
+
+        $new_product = product::create($product);
+     
         if($req->has('images')){
             foreach($req->file('images')as $image){
                 $imageName = $product['name'].'-image-'.time().rand(1,1000).'.'.$image->extension();
@@ -168,19 +179,48 @@ public function calculateDiscount(Request $request)
     public function update(Request $request, $id)
     {
 
-        $product = $request->validate([
+       $request->validate([
             'harga' => 'required|numeric',
             'name' => 'required',
             'category_id' => 'required',
             'stok'      => 'required|min:1',
             'discount'          => 'nullable|min:2|max:255',
+            'desc'          => 'nullable',
             'status' => 'required',
+           
         ] );
 
         
 
-       
+     
 
+
+        $product = [
+            'harga' => $request->input('harga'),
+            'name' => $request->input('name'),
+            'category_id' => $request->input('category_id'),
+            'desc' => $request->input('desc'),
+            'discount' => $request->input('discount'),
+            'stok' => $request->input('stok'),
+            'status' => $request->input('status'),
+        ];
+
+        if ($request->hasFile('foto')) {
+            $request->validate([
+                'foto' => 'image|file|max:10000',
+            ], [
+                'foto.image' => 'Foto hanya diperbolehkan berekstensi JPEG, JPG, PNG, dan GIF',
+            ]);
+            $foto_file = $request->file('foto');
+            $foto_ekstensi = $foto_file->extension();
+            $foto_nama = date('ymdhis').'.'.$foto_ekstensi;
+            $foto_file->move(public_path('foto'), $foto_nama); //sudah terupload ke direktori
+
+            $product_foto = product::where('id', $id)->first();
+            File::delete(public_path('foto').'/'.$product_foto->foto);
+
+            $product['foto'] = $foto_nama;
+        }
 
         $new_product = product::where('id', $id)->update($product);
 
@@ -207,7 +247,9 @@ public function calculateDiscount(Request $request)
 
     public function destroy($code)
     {
-
+        $product_foto = product::where('code', $code)->first();
+        File::delete(public_path('foto') . '/' . $product_foto->foto);
+    
         product::where('code', $code)->delete();
         return redirect('/product')->with('success', 'Berhasil hapus data');
     }

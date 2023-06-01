@@ -22,8 +22,9 @@ class CreateProductsTable extends Migration
             $table->string('slug')->unique()->nullable();
             $table->enum('status', ['post', 'pending']);
             $table->string('discount')->nullable();
+            $table->longtext('desc')->nullable();
             $table->unsignedBigInteger('category_id');
-            // $table->string('total');
+            $table->string('foto');
             $table->foreign('category_id')->references('id')->on('sub_category')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

@@ -49,6 +49,13 @@
         </div>
 
         <div class="mb-3 row">
+            <label for="desc" class="col-sm-2 col-form-label">Descripsi</label>
+            <div class="col-sm-10">
+            <textarea class="form-control  summernote" name="desc" value="{{Session::get('desc')}}"  id="desc"></textarea>
+            </div>
+        </div>
+        
+        <div class="mb-3 row">
             <label for="category_id" class="col-sm-2 col-form-label">category</label>
             <div class="col-sm-10">
                 <select type="text" name="category_id"  name="category_id" value="{{Session::get('category_id')}}" id="category_id"  class="form-control">
@@ -63,8 +70,9 @@
     
        
 
-        <div class="form-group">
-            <label for="files" class="form-label mt-4">Upload Product Images:</label>
+        <div class="mb-3 row">
+            <label for="files" class="col-sm-2 col-form-label">Upload Product Images:</label>
+            <div class="col-sm-10">
             <input 
                 type="file" 
                 name="images[]"
@@ -72,7 +80,19 @@
                 accept="image/*"
                 multiple
             >
+            </div>
         </div>
+
+
+        <div class="mb-3 row">
+            <label for="foto" class="col-sm-2 col-form-label">Foto Cover</label>
+            <div class="col-sm-10">
+            <input type="file" class="form-control" name="foto" id="foto">
+            </div>
+        </div>
+
+
+
         <div class="mb-3 row">
             <label for="status" class="form-label">status</label>
             <select type="text" name="status"  name="status"  value="{{Session::get('status')}}" id="status"  class="form-control">

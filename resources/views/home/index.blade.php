@@ -112,114 +112,45 @@
   </div>
 </section>
 
-<!-- end about section -->
-
-<!-- dish section -->
-
-<section class="dish_section layout_padding">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="dish_container">
-          <div class="box">
-            <img src="images/dish.jpg" alt="">
-          </div>
-          <div class="box">
-            <img src="images/dish.jpg" alt="">
-          </div>
-          <div class="box">
-            <img src="images/dish.jpg" alt="">
-          </div>
-          <div class="box">
-            <img src="images/dish.jpg" alt="">
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="detail-box">
-          <div class="heading_container">
-            <hr>
-            <h2>
-              Our <br>
-              Food <br>
-              dishs
-            </h2>
-          </div>
-          <p>
-            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
-            in
-            some form, by injected humour, or randomised words
-          </p>
-         
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- end dish section -->
-
-<!-- hot section -->
-{{--  
- 
-<section class="hot_section layout_padding" id="product">
-  <div class="container">
-    <div class="heading_container">
-      <h2>
-        What's Hot
-      </h2>
-      <hr>
-    </div>
-    <p>
-      There are many variations of passages of Lorem Ipsum available, but the majority
-    </p>
-  </div>
-  <div class="carousel_container">
-    <div class="container">
-      <div class="carousel-wrap ">
-        <div class="owl-carousel">
-    
-          <div class="item">
-          
-            <div class="box">
-                @foreach ($product as $item)
-            @if ($item->status == "post")
-              <div class="detail-box">
-                <h4>
-                {{$item->harga}}
-                </h4>
-                <p>
-                {{$item->name}}
-                </p>
-                <div class="btn-group">
-                <a href={{route('images',$item->id)}} class="btn btn-outline-dark me-2"><i class="bi bi-eye"></i></a>
-                <form action="{{ route('addtocart') }}" method="POST">
-                  @csrf
-                  <input type="hidden" name="product_id"  value="{{$item->id}}">
-                       <button class="btn btn-outline-primary "><i class="bi bi-cart-check"></i></button>
-                 <form>
-                 </div>
-              </div>
-              @endif
-              @endforeach
-            </div>
-          
-          </div>
-        
-         
-        </div>
-      </div>
-    </div>
-  </div>
-</section>   --}}
 
 
 
 <section class="case-studies" id="case-studies-section">
-  <div  style="padding:50 50 50 50;"class="row grid-margin">
-    <div class="col-12 text-center pb-5 mb-5 " id="product">
-      <h2 >Product</h2>
-    </div>
+
+  
+  <div  style="padding:50 50 50 50;"class="row grid-margin" id="product">
+  
+    <form action="/" method="get">
+      @csrf
+      <div class="row p-5">
+          <div class="col-sm-2">
+              <label for="" class="form-label">Name Product</label>
+              <input name="name" type="text" class="form-control" placeholder="Name" value="{{isset($_GET['name']) ? $_GET['name'] : ''}}">  
+          </div>
+          <div class="col-sm-2">
+              <label for="" class="form-label">Crated at</label>
+              <input name="created_at" type="date" class="form-control" placeholder="created_at" value="{{isset($_GET['created_at']) ? $_GET['created_at'] : ''}}">  
+          </div>
+         
+          <div class="col-sm-2">
+            <label for="" class="form-label">category</label>
+            <select name="category_id" class="form-select">
+              @foreach ($data as $item)
+              @if ($item->status == "post")
+              <option value="{{ $item->id }}">{{ $item->name ?? 'None' }}</option>
+              @endif
+              @endforeach
+            
+               
+            </select>
+        </div>
+  
+        
+          <div class="col-sm-3 text-center">
+              <button type="submit" class="btn btn-outline-primary mt-4">Search</button>
+          </div>
+      </div>
+  </form>
     @foreach ($product as $item)
     @if ($item->status == "post")
     <div  class="col-12 col-md-6 col-lg-3 stretch-card mb-3 mb-lg-0 " data-aos="zoom-in">
@@ -233,8 +164,11 @@
             </div>
           </div>
           <div class="card-details text-center pt-4">
-              <h6 class="m-0 pb-1">Stok : {{ $item->stok }}</h6>
-              {{-- <p> Harga : {{ $item->harga }}, Discount : {{ $item->discount ?? 'no discount' }}    </p> --}}
+             @if ($item->foto)
+            <img  style="max-height:100%; max-width:100%;"src='{{ url('foto').'/'.$item->foto }}' class="d-block w-100 img-fluid" id="foto" alt="picture"/> 
+            @endif 
+            
+              <p class="text-bottom">Category : {{$item->subCategory->name ?? 'None' }} </p>
               @php
               $discount = $item->discount;
                 $discountedPrice =(int)$item->harga - ((int)$discount / 100 * (int)$item->harga) ;
@@ -244,9 +178,11 @@
           Discount : {{ $item->discount ?? 'no discount' }}  </p>
           @else
           <p>Harga : {{$item->harga }}   {{ $item->discount ?? 'no discount' }}</p>
+
           @endif
+          <p>Stok : {{ $item->stok }}</p>
               <div class="btn-group">
-                <a href={{route('images',$item->id)}} class="btn btn-outline-dark me-2"><i class="bi bi-eye"></i></a>
+                <a href={{route('images',$item->slug)}} class="btn btn-outline-dark me-2"><i class="bi bi-eye"></i></a>
                 
                  </div>
           </div>

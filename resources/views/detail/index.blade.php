@@ -42,14 +42,17 @@
                                 <h2 class="text-uppercase">{{ $product->name }}</h2>
                                 <div class="lokasi d-flex flex-row align-items-center">
                                   <p>harga : {{$product->harga }}, </p>
+                                  @php
+                                  $discount = $product->discount;
+                                    $discountedPrice =(int)$product->harga - ((int)$discount / 100 * (int)$product->harga) ;
+                             @endphp
                                     <p class="lokasi"> discount : {{ $product->discount ?? 'no discount'}} </p>
                             </div>
                             @if ($product->discount)
                             <p>Final price: {{ $discountedPrice }}</p>
-                            {{-- @else
-                            {{$product->harga }} --}}
                             @endif
                             <h5 class="text-bottom">Category : {{$product->subCategory->name ?? 'None' }} </h5>
+                            <p>{!! $product->desc !!} </p>
                             <form action="{{ route('addtocart') }}" method="POST">
                               @csrf
                               <input type="hidden" name="product_id"  value="{{$product->id}}">

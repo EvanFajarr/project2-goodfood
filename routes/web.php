@@ -1,5 +1,6 @@
 <?php
 
+use Spatie\Permission\Models\Role;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CsvController;
@@ -28,7 +29,8 @@ use App\Http\Controllers\SubCategoryController;
 // });
 
 
-// Route::middleware(['admin'])->group(function () {
+
+Route::middleware([ 'role:admin'])->group(function () {
 
 Route::get('/category',[CategoryController::class,'index'])->name('category.index');//category
 Route::get('/category/create',[CategoryController::class,'create'])->name('category.create');
@@ -78,7 +80,7 @@ Route::get('/orderexport', [CsvController::class, 'orderexport'])->name('orderex
 
 
 
-Route::get('/user', [UserController::class, 'index']);
+Route::get('/user', [UserController::class, 'index'])->middleware(['session']);
 Route::get('/user/create', [UserController::class, 'create']);
 Route::post('/user/create', [UserController::class, 'store']);
 Route::delete('/delete/{id}', [UserController::class, 'destroy']);
@@ -92,7 +94,7 @@ Route::delete('/users/{user}/roles/{role}', [UserController::class, 'removeRole'
 
 Route::post('/user/{id}/show', [UserController::class, 'givePermission'])->name('users.permissions'); //give permision in rolle
 Route::delete('/users/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
-// });
+ });
 
 
 
@@ -106,7 +108,7 @@ Route::post('/logout', [LoginController::class, 'logout']);
 
 
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/product/{id}',[HomeController::class,'detail'])->name('images');
+
 
 //cart
 Route::post('/addtocart', [CartController::class, 'cart'])->name('addtocart')->middleware(['session']);
@@ -135,3 +137,5 @@ Route::get('/detailUser', [UserController::class, 'detail']);
 
 Route::get('/editUser', 'App\Http\Controllers\UserController@edit');
 Route::put('/editUser', 'App\Http\Controllers\UserController@edit');
+
+Route::get('/product/{slug}',[HomeController::class,'detail'])->name('images');
