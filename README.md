@@ -36,9 +36,6 @@
 
 
 
-
-
-
 1. membuat halaman frontend untuk pengguna
 2. Membuat fungsi login, pendaftaran, dan lupa kata sandi untuk pengguna
 3. halaman beranda

@@ -17,7 +17,7 @@ class CheckUser
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            return redirect('/')->with('success', 'Kamu sudah dalam keadaan login!');
+            return redirect('/user')->with('success', 'Kamu sudah dalam keadaan login!');
         }
 
         return $next($request);

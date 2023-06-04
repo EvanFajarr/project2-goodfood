@@ -98,16 +98,24 @@ Route::delete('/users/{user}/permissions/{permission}', [UserController::class, 
 
 
 
-Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware(['user']);
+Route::get('/loginAdmin', [LoginController::class, 'index'])->name('loginAdmin')->middleware(['user']);
 Route::post('/login/login', [LoginController::class, 'login']);
+
+
+
 //register
-Route::get('/login/register', [LoginController::class, 'register'])->middleware(['user']);
-Route::post('/login/create', [LoginController::class, 'create']);
+// Route::get('/login/register', [LoginController::class, 'register'])->middleware(['user']);
+// Route::post('/login/create', [LoginController::class, 'create']);
+
+
+
 //logout
 Route::post('/logout', [LoginController::class, 'logout']);
 
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::middleware([ 'role:user'])->group(function () {
+
 
 
 //cart
@@ -128,8 +136,6 @@ Route::delete('/hapus/{id}', [OrderController::class, 'destroy']);
 Route::delete('/destroy/{id}', [OrderController::class, 'delete']);
 
 
-
-
 //project 3
 
 Route::get('/detailUser', [UserController::class, 'detail']);
@@ -139,3 +145,9 @@ Route::get('/editUser', 'App\Http\Controllers\UserController@edit');
 Route::put('/editUser', 'App\Http\Controllers\UserController@edit');
 
 Route::get('/product/{slug}',[HomeController::class,'detail'])->name('images');
+
+});
+
+Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

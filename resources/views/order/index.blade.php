@@ -27,12 +27,12 @@
                              
                                 <div class="mb-3">
                                   <label for="alamat" class="form-label">alamat</label>
-                                  <input type="text" name="alamat" class="form-control">
+                                  <input type="text" name="alamat" value="{{ Auth::user()['alamat'] }}" class="form-control">
                                 </div>
 
                                 <div class="mb-3">
                                   <label for="name" class="form-label">Phone Number</label>
-                                  <input type="text" name="no" class="form-control">
+                                  <input type="text" name="no" value="{{ Auth::user()['no'] }}" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                   <label for="name" class="form-label">Note</label>

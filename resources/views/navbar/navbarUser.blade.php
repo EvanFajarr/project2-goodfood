@@ -28,14 +28,19 @@
               <a class="dropdown-item" href="/user">Dasboard</a>
               @endrole
 
-               <form action="{{ url('/logout') }}" method="post">
+               {{-- <form action="{{ url('/logout') }}" method="post">
                 @csrf
                    <button type="submit" class="btn btn-outline-warning "><i class="bi bi-box-arrow-right">Logout</i></button>
-              </form>  
+              </form>   --}}
+              
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" >
+                @csrf
+                <button type="submit" class="btn btn-outline-warning "><i class="bi bi-box-arrow-right">Logout</i></button>
+            </form>
             
               @else
               <a href="/login" class="nav-link">Login</a>
-              <a href="/login/register" class="nav-link">Register</a>
+              <a href="/register" class="nav-link">Register</a>
               @endif
             </div>
           </div>
