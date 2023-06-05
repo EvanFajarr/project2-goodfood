@@ -141,13 +141,16 @@ Route::delete('/destroy/{id}', [OrderController::class, 'delete']);
 Route::get('/detailUser', [UserController::class, 'detail']);
 
 
-Route::get('/editUser', 'App\Http\Controllers\UserController@edit');
-Route::put('/editUser', 'App\Http\Controllers\UserController@edit');
+Route::get('/editUser', [UserController::class, 'edit']);
+Route::put('/editUser', [UserController::class, 'edit']);
 
 Route::get('/product/{slug}',[HomeController::class,'detail'])->name('images');
 
 });
 
 Auth::routes();
+
+Route::get('/{code}', [OrderController::class, 'editOrder']);
+Route::put('/{code}', [OrderController::class, 'updateOrder']);
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

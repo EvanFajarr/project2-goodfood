@@ -21,6 +21,8 @@ class CreateOrdersTable extends Migration
             $table->text('item');
             $table->string('total');
             // $table->unsignedBigInteger('product_id');
+            $table->enum('pembayaran', ['cash on delivery']);
+            $table->string('code')->nullable();
             $table->text('note')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

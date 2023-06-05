@@ -5,6 +5,7 @@
 
         <div class="container">
           <div class="row mt-5">
+            @include('pesan.pesan')
             <div class="col mt-2">
               <h4>
              Your Cart

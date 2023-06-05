@@ -19,6 +19,8 @@ class order extends Model
         'user_id',
         'status',
         'total',
+        'code',
+        'pembayaran',
     ];
 
     protected $guarded = ['id'];

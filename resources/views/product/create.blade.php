@@ -19,12 +19,12 @@
         </div>
 
 
-        <div class="mb-3 row">
+        {{-- <div class="mb-3 row">
             <label for="code" class="col-sm-2 col-form-label">code</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" value="{{Session::get('code')}}" name='code'id="code">
             </div>
-        </div>
+        </div> --}}
 
 
         <div class="mb-3 row">

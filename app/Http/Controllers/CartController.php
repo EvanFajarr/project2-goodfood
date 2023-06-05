@@ -29,6 +29,6 @@ class CartController extends Controller
      {
          cart::where('id', $id)->delete();
 
-         return redirect()->to('')->with('erorr', 'Berhasil menghapus data cart');
+         return redirect()->to('/cartlist')->with('success', 'Berhasil menghapus data cart');
      }
 }

@@ -165,7 +165,7 @@
           </div>
           <div class="card-details text-center pt-4">
              @if ($item->foto)
-            <img  style="max-height:100%; max-width:100%;"src='{{ url('foto').'/'.$item->foto }}' class="d-block w-100 img-fluid" id="foto" alt="picture"/> 
+            <img  style="height:300px; max-width:100%;"src='{{ url('foto').'/'.$item->foto }}' class="d-block w-100 img-fluid" id="foto" alt="picture"/> 
             @endif 
             
               <p class="text-bottom">Category : {{$item->subCategory->name ?? 'None' }} </p>
@@ -183,7 +183,7 @@
           <p>Stok : {{ $item->stok }}</p>
               <div class="btn-group">
                 <a href={{route('images',$item->slug)}} class="btn btn-outline-dark me-2"><i class="bi bi-eye"></i></a>
-                
+            
                  </div>
           </div>
         </div>

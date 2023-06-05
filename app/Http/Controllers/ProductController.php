@@ -86,7 +86,7 @@ class ProductController extends Controller
             'harga' => 'required|numeric',
             'name' => 'required|unique:product',
             'category_id' => 'required',
-            'code'      => 'required|min:3|max:255|unique:product',
+            // 'code'      => 'required|min:3|max:255|unique:product',
             'stok'      => 'required|min:1',
             'slug'          => 'nullable|min:3|max:255|unique:product',
             'discount'          => 'nullable|min:2|max:255',
@@ -110,7 +110,8 @@ class ProductController extends Controller
             'stok' => $req->input('stok'),
             'slug' => $req->input('slug'),
             'status' => $req->input('status'),
-            'code' => $req->input('code'),
+            'code' => Str::random(10),
+          
         ];
       
 

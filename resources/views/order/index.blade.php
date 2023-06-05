@@ -105,7 +105,9 @@
                               @endphp
                               <div class="m-3 text-right">
                                 <p class="text-muted">Total : {{$total}}</p>
-                                <button type="submit" class="btn btn-danger">Order</button>
+                      
+                                  <button type="submit" onclick="return confirm('Apakah data diri sudah benar?');"  name="submit" class="btn btn-danger">Order</button>
+                            
                               </div>
                             </form>
                             </div>

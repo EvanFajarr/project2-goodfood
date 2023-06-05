@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\cart;
 use App\Models\order;
 use App\Models\product;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -40,6 +41,8 @@ class OrderController extends Controller
                 'note' => 'nullable|max:255',
                 'item' => 'required',
                 'total' => 'required',
+                // 'pembayaran' => 'required',
+                'code' => 'nullable',
 
             ]);
             $order = new order;
@@ -51,6 +54,8 @@ class OrderController extends Controller
             $order->status = 'terkirim';
             $order->item = $request['item'];
             $order->total = $request['total'];
+            $order->pembayaran = 'cash on delivery';
+            $order->code = Str::random(50);
             if ($order->save()) {
                 Session::forget('cart');
 
@@ -68,7 +73,6 @@ class OrderController extends Controller
     {
         $userId = Auth::user()->id;
         $order = order::where('user_id', $userId)->get();
-
         return view('home.order')->with('order', $order);
     }
     public function edit($id)
@@ -139,4 +143,32 @@ class OrderController extends Controller
         return back()->with('success', 'Berhasil hapus order');
     }
 
+    public function editOrder ($code)
+    {
+        $order = order::where('code', $code)->first();
+
+        return view('order.editOrder')->with('order', $order);
+    }
+
+    public function updateOrder(Request $request, $code)
+    {
+        $request->validate([
+            'nama' => 'required',
+            'alamat' => 'required',
+            'no' => 'required',
+            'note' => 'nullable',
+
+        ]);
+        $order = [
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'no' => $request->no,
+            'note' => $request->note,
+
+        ];
+
+        order::where('code', $code)->update($order);
+
+        return redirect()->to('orderUser')->with('success', 'update berhasil');
+    }
 }
