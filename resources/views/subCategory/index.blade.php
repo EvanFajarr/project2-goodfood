@@ -140,10 +140,10 @@
                             <td>{{$item->status}}</td>
                             <td>
                                 @can('Subcategory edit')
-                                <a href= '{{url('category/'.$item->code.'/edit')}}'  class="btn btn-warning btn-sm"><i class="bi bi-pen"></i></a>
+                                <a href= '{{url('Subcategory/'.$item->code.'/edit')}}'  class="btn btn-warning btn-sm"><i class="bi bi-pen"></i></a>
                                 @endcan
                                 @can('Subcategory delete')
-                                <form onsubmit="return confirm('Yakin mau menghapus data?')" class='d-inline' action="{{ url('category/'.$item->code) }}" method="post">
+                                <form onsubmit="return confirm('Yakin mau menghapus data?')" class='d-inline' action="{{ url('Subcategory/'.$item->code) }}" method="post">
                                 @csrf 
                                 @method('DELETE')
                                 <button type="submit" name="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>

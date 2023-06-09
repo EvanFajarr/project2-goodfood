@@ -52,7 +52,7 @@
 
 @can('Subcategory index')
     <li class="nav-item">
-        <a class="nav-link" href="Subcategory">
+        <a class="nav-link" href="/Subcategory">
             <i class="fas fa-clipboard-list"></i>
             <span>Subcategory</span>
         </a>

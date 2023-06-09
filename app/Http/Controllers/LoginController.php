@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User;
+use App\Models\admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,22 +15,15 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ], [
-            'email' => 'Email wajib diisi',
-            'password' => 'Pasword wajib diisi',
-        ]);
-        $infologin = [
-            'email' => $request->email,
-            'password' => $request->password,
-        ];
-        if (Auth::attempt($infologin)) {
-            return redirect('/user')->with('success', 'Berhasil login');
-        } else {
-            return redirect('/loginAdmin')->withErrors('Username dan Password salah');
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('admin')->attempt($credentials)) {
+            return redirect()->intended('/user');
         }
+
+        return redirect('/loginAdmin')->with('error', 'Invalid login credentials');
+    
     }
 
   public function logout(Request $request)

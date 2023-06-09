@@ -74,7 +74,7 @@ class CategoryController extends Controller
 
         $request->validate([
             'name'      => 'required|min:3|max:255|string|unique:category',
-            'code'      => 'required|min:3|max:255|unique:category',
+            // 'code'      => 'required|min:3|max:255|unique:category',
             'slug'          => 'nullable|min:3|max:255|unique:category',
             'status' => 'required'
       ]);
@@ -84,7 +84,7 @@ class CategoryController extends Controller
     $category = [
         'name' => $request->input('name'),
         'slug' => $request->input('slug'),
-        'code' => $request->input('code'),
+        'code' => Str::random(10),
         'status' => $request->input('status'),
     ];
 

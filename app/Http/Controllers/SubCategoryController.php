@@ -77,7 +77,7 @@ class SubCategoryController extends Controller
 
         $request->validate([
             'name'      => 'required|min:3|max:255|string|unique:sub_category',
-            'code'      => 'required|min:3|max:255|unique:sub_category',
+        //    'code'      => 'required|min:3|max:255|unique:sub_category',
             'slug'          => 'nullable|min:3|max:255|unique:sub_category',
             'status' => 'required',
             'parent_id' => 'required'
@@ -88,7 +88,7 @@ class SubCategoryController extends Controller
     $subCategory = [
         'name' => $request->input('name'),
         'slug' => $request->input('slug'),
-        'code' => $request->input('code'),
+        'code' => Str::random(10),
         'status' => $request->input('status'),
         'parent_id' => $request->input('parent_id'),
     ];

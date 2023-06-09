@@ -1,10 +1,12 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\User;
+use App\Models\admin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 
 class UserTableSeeder extends Seeder
 {
@@ -15,13 +17,21 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create([
+
+        // $role = Role::create([
+        //     'name' => 'admin',
+        //     'guard_name' => 'admin',
+        // ]);
+
+        $user = admin::create([
             'name' => 'admin1',
             'email' => 'admin1@gmail.com',
-            'alamat' => 'Panggungharjo,Sewon,Bantul',
-            'no' => '0896789936333',
+            // 'alamat' => 'Panggungharjo,Sewon,Bantul',
+            // 'no' => '0896789936333',
+            'email_verified_at' => now(), 
             'password' => Hash::make('password'),
             
-        ]);  $user->assignRole('user', 'admin');
+        ]); 
+        $user->assignRole('1');
     }
 }

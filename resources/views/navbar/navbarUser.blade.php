@@ -24,10 +24,7 @@
               <a href="/detailUser"> {{ Auth::user()->name }}</a>
               <a href="/cartlist">cart</a> 
               <a href="/orderUser">order</a> 
-              @role('admin')
-              <a class="dropdown-item" href="/user">Dasboard</a>
-              @endrole
-
+           
                {{-- <form action="{{ url('/logout') }}" method="post">
                 @csrf
                    <button type="submit" class="btn btn-outline-warning "><i class="bi bi-box-arrow-right">Logout</i></button>

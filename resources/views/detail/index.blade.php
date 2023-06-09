@@ -4,6 +4,7 @@
 
 <title>Detail</title>
   <div class="container mt-5 mb-5">
+    @include('pesan.pesan')
     <div  class="row d-flex justify-content-center">
         <div class="col-md-12 ">
             <div class="card ">

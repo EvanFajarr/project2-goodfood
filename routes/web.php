@@ -30,8 +30,10 @@ use App\Http\Controllers\SubCategoryController;
 
 
 
-Route::middleware([ 'role:admin'])->group(function () {
+//  Route::group(['middleware' => 'auth:admin'], function () {
 
+    Route::group(['middleware' => 'auth:admin','role:admin'], function () {
+    // Route::middleware([ 'role:admin'])->group(function () {
 Route::get('/category',[CategoryController::class,'index'])->name('category.index');//category
 Route::get('/category/create',[CategoryController::class,'create'])->name('category.create');
 Route::post('/category/create',[CategoryController::class,'store'])->name('category.store');
@@ -80,7 +82,7 @@ Route::get('/orderexport', [CsvController::class, 'orderexport'])->name('orderex
 
 
 
-Route::get('/user', [UserController::class, 'index'])->middleware(['session']);
+Route::get('/user', [UserController::class, 'index']);
 Route::get('/user/create', [UserController::class, 'create']);
 Route::post('/user/create', [UserController::class, 'store']);
 Route::delete('/delete/{id}', [UserController::class, 'destroy']);
@@ -89,18 +91,18 @@ Route::get('/user/{id}/show', [UserController::class, 'show'])->name('users.show
 
 Route::put('/user/{id}/show', [UserController::class, 'update'])->name('users.update');
 
-Route::post('/user/{id}/ya', [UserController::class, 'assignRole'])->name('users.roles'); //asignrole in user
-Route::delete('/users/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('users.roles.remove');
+// Route::post('/user/{id}/ya', [UserController::class, 'assignRole'])->name('users.roles'); //asignrole in user
+// Route::delete('/users/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('users.roles.remove');
 
 Route::post('/user/{id}/show', [UserController::class, 'givePermission'])->name('users.permissions'); //give permision in rolle
 Route::delete('/users/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
- });
+  });
 
 
-
-Route::get('/loginAdmin', [LoginController::class, 'index'])->name('loginAdmin')->middleware(['user']);
+//   Route::group(['middleware' => 'guest:admin'], function () {
+Route::get('/loginAdmin', [LoginController::class, 'index']);
 Route::post('/login/login', [LoginController::class, 'login']);
-
+// });
 
 
 //register
@@ -108,16 +110,17 @@ Route::post('/login/login', [LoginController::class, 'login']);
 // Route::post('/login/create', [LoginController::class, 'create']);
 
 
-
+//->middleware(['admin'])
 //logout
 Route::post('/logout', [LoginController::class, 'logout']);
 
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::middleware([ 'role:user'])->group(function () {
+Route::get('/', [HomeController::class, 'index'])->name('home')->middleware(['admin']);
 
 
 
+
+Route::middleware([ 'role:user','auth'])->group(function () {
 //cart
 Route::post('/addtocart', [CartController::class, 'cart'])->name('addtocart')->middleware(['session']);
 
@@ -144,10 +147,10 @@ Route::get('/detailUser', [UserController::class, 'detail']);
 Route::get('/editUser', [UserController::class, 'edit']);
 Route::put('/editUser', [UserController::class, 'edit']);
 
-Route::get('/product/{slug}',[HomeController::class,'detail'])->name('images');
+
 
 });
-
+Route::get('/product/{slug}',[HomeController::class,'detail'])->name('images');
 Auth::routes();
 
 Route::get('/{code}', [OrderController::class, 'editOrder']);

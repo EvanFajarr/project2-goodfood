@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\admin;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+
+   
   public function index(Request $Request){
     // $user=User::all();
     // return view('user.index')->with('user',$user);
@@ -20,12 +23,12 @@ class UserController extends Controller
     $katakunci = $Request->katakunci;
     $baris = 5;
     if (strlen($katakunci)) {
-        $user = User::where('id', 'like', "%$katakunci%")
+        $user = admin::where('id', 'like', "%$katakunci%")
             ->orWhere('name', 'like', "%$katakunci%")
             ->orWhere('email', 'like', "%$katakunci%")
               ->paginate($baris);
     } else {
-        $user= User::orderBy ('id','desc')->paginate($baris);
+        $user= admin::orderBy ('id','desc')->paginate($baris);
     }
 
     return view('user.index')->with('user',$user);
@@ -41,35 +44,42 @@ class UserController extends Controller
   {
       Session::flash('name', $request->name);
       Session::flash('email', $request->email);
-      Session::flash('alamat', $request->alamat);
-      Session::flash('no', $request->no);
+    //   Session::flash('alamat', $request->alamat);
+    //   Session::flash('no', $request->no);
       Session::flash('password', $request->password);
 
       $request->validate([
           'name' => 'required',
-          'email' => 'required|email|unique:users',
-          'alamat' => 'required',
-          'no' => 'required|min:11',
+          'email' => 'required|email|unique:admin',
+        //   'alamat' => 'required',
+        //   'no' => 'required|min:11',
           'password' => 'required|min:8',
       ], );
       $user = [
         'name' => $request->name,
         'email' => $request->email,
-        'alamat' => $request->alamat,
-        'no' => $request->no,
+        // 'alamat' => $request->alamat,
+        // 'no' => $request->no,
         'password' => Hash::make($request->password),
     ];
 
-    User::create($user);
-
-    return redirect()->to('user')->with('success', 'Berhasil menambahkan Data User ');
+  $user =  admin::create($user);
+    $user->assignRole('1');
+    $user = [
+                  'name' => $request->name,
+                  'email' => $request->email,
+                  'password' => $request->password,
+                //   'alamat' => $request->alamat,
+                //   'no' => $request->no,
+              ];
+    return redirect()->to('user')->with('success', 'Berhasil menambahkan Data Admin ');
     }
 
 
     
     public function destroy($id)
     {
-        User::where('id', $id)->delete();
+        admin::where('id', $id)->delete();
 
         return redirect()->to('user')->with('success', 'Berhasil menghapus  data');
     }
@@ -80,34 +90,37 @@ class UserController extends Controller
     {
         $rolle = Role::all();
         $permissions = Permission::all();
-        $user = User::where('id', $id)->first();
+        $user = admin::where('id', $id)->first();
 
         return view('user.rolle', compact('rolle', 'user', 'permissions'));
     }
 
-    public function assignRole(Request $request, $id)
-    {
-        $user = User::where('id', $id)->firstOrFail();
-        $rolle = Role::where('id', $request->rolle)->firstOrFail();
-        $user->assignRole($rolle);
-        return back();
-    }
+    // public function assignRole(Request $request,admin $user,  $id)
+    // {
+    //     $user = admin::where('id', $id)->firstOrFail();
+    //     $rolle = Role::where('id', $request->rolle)->firstOrFail();
+    //     $user->assignRole($rolle);
+    //     return back();
+     
+    
+    // }
 
-    public function removeRole(User $user, Role $role)
-    {
-        if ($user->hasRole($role)) {
-            $user->removeRole($role);
+  
+    // public function removeRole(admin $user, Role $role)
+    // {
+    //     if ($user->hasRole($role)) {
+    //         $user->removeRole($role);
 
-            return back()->with('success', 'Role removed.');
-        }
+    //         return back()->with('success', 'Role removed.');
+    //     }
 
-        return back()->with('success', 'Role not exists.');
-    }
+    //     return back()->with('success', 'Role not exists.');
+    // }
 
 
     public function givePermission(Request $request, $id)
     {
-        $user = User::where('id', $id)->firstOrFail();
+        $user = admin::where('id', $id)->firstOrFail();
         $permission = Permission::where('id', $request->permision_name)->firstOrFail();
         $user->givePermissionTo($permission);
 
@@ -115,7 +128,7 @@ class UserController extends Controller
 
     }
 
-    public function revokePermission(User $user, Permission $permission)
+    public function revokePermission(admin $user, Permission $permission)
     {
         if ($user->hasPermissionTo($permission)) {
             $user->revokePermissionTo($permission);
@@ -127,11 +140,7 @@ class UserController extends Controller
     }
 
 
-    // public function edit($id)
-    // {
-    //     $user = User::where('id', $id)->first();
-    //     return view('user.rolle', compact( 'user'));
-    // }
+    
 
     public function update(Request $request,$id)
 {
@@ -142,20 +151,15 @@ class UserController extends Controller
     $request->validate([
         'name' => 'required',
         'email' => 'required',
-        'alamat' => 'required',
-        'no' => 'required|min:11',
-        'password' => 'nullable|min:8',
     ], );
 
     $user = [
         'name' => $request->name,
         'email' => $request->email,
-        'alamat' => $request->alamat,
-        'no' => $request->no,
-        'password' => Hash::make($request->password),
+  
 
     ];
-    User::where('id', $id)->update($user);
+    admin::where('id', $id)->update($user);
 
     return redirect('/user')->with('success', 'Berhasil melakukan update data');
 }
@@ -187,6 +191,7 @@ public function edit(Request $request){
             }else{
                 $password = Auth::user()->password;
             }
+            // $user = User::find(Auth::guard('user')->id());
             $user = User::find(Auth::user()->id);
             $user->name     = $request['name'];
             $user->alamat   = $request['alamat'];
