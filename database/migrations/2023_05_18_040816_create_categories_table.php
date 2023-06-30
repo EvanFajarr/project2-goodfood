@@ -17,7 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->string('slug')->unique()->nullable();
-             $table->enum('status', ['post', 'pending']);
+            $table->enum('status', ['post', 'pending']);
             $table->string('name')->unique();
             $table->timestamps();
         });

@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\product;
 use Illuminate\Database\Eloquent\Model;
-
 
 class order extends Model
 {
-  
-
     protected $fillable = [
         'nama',
         'alamat',
@@ -37,6 +33,4 @@ class order extends Model
     //     return $this->belongsTo(product::class,'product_id');
     // }
 
-    
-    
 }

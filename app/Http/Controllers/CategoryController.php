@@ -3,21 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\category;
-use Illuminate\Support\Str;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-
     public function __construct()
-     {
-         $this->middleware('permission:category index', ['only' => ['index']]);
-         $this->middleware('permission:category create', ['only' => ['create', 'store']]);
-         $this->middleware('permission:category edit', ['only' => ['edit', 'update']]);
-         $this->middleware('permission:category delete', ['only' => ['destroy']]);
-     }
+    {
+        $this->middleware('permission:category index', ['only' => ['index']]);
+        $this->middleware('permission:category create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:category edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:category delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,10 +25,9 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-      
+
         $category = category::query();
 
-        
         $category->when($request->name, function ($query) use ($request) {
             return $query->where('name', 'like', '%'.$request->name.'%');
         });
@@ -36,13 +35,11 @@ class CategoryController extends Controller
         $category->when($request->created_at, function ($query) use ($request) {
             return $query->where('created_at', 'like', '%'.$request->created_at.'%');
         });
-       
 
-       
         $category->when($request->status, function ($query) use ($request) {
             return $query->whereStatus($request->status);
         });
-        
+
         return view('category.index', ['category' => $category->paginate(10)]);
     }
 
@@ -61,7 +58,6 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -73,23 +69,22 @@ class CategoryController extends Controller
         Session::flash('status', $request->status);
 
         $request->validate([
-            'name'      => 'required|min:3|max:255|string|unique:category',
+            'name' => 'required|min:3|max:255|string|unique:category',
             // 'code'      => 'required|min:3|max:255|unique:category',
-            'slug'          => 'nullable|min:3|max:255|unique:category',
-            'status' => 'required'
-      ]);
+            'slug' => 'nullable|min:3|max:255|unique:category',
+            'status' => 'required',
+        ]);
 
+        $category = [
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+            'code' => Str::random(10),
+            'status' => $request->input('status'),
+        ];
 
+        category::create($category);
 
-    $category = [
-        'name' => $request->input('name'),
-        'slug' => $request->input('slug'),
-        'code' => Str::random(10),
-        'status' => $request->input('status'),
-    ];
-
-      category::create($category);
-      return redirect('/category')->withSuccess('You have successfully created a Category!');
+        return redirect('/category')->withSuccess('You have successfully created a Category!');
     }
 
     /**
@@ -111,7 +106,7 @@ class CategoryController extends Controller
      */
     public function edit($code)
     {
-        
+
         $category = category::where('code', $code)->first();
 
         return view('category.edit')->with('category', $category);
@@ -120,7 +115,6 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -131,9 +125,9 @@ class CategoryController extends Controller
         Session::flash('status', $request->status);
 
         $request->validate([
-            'name'      => 'required|min:3|max:255|string',
-            'slug'          => 'nullable|min:3|max:255',
-            'status' => 'required'
+            'name' => 'required|min:3|max:255|string',
+            'slug' => 'nullable|min:3|max:255',
+            'status' => 'required',
         ], );
 
         $category = [
@@ -160,8 +154,10 @@ class CategoryController extends Controller
         return redirect('/category')->with('success', 'Berhasil hapus data');
     }
 
-    public function slug(Request $request){
-        $slug = SlugService::createSlug(category::class, 'slug', $request->name );
+    public function slug(Request $request)
+    {
+        $slug = SlugService::createSlug(category::class, 'slug', $request->name);
+
         return response()->json(['slug' => $slug]);
     }
 }

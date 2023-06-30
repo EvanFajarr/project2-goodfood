@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Middleware;
-use Illuminate\Support\Facades\Auth;
+
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CheckAdmin
 {
@@ -14,7 +15,7 @@ class CheckAdmin
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
-    { 
+    {
         // if (Auth::guard('admin')->user()) {
         //     return $next($request);
         // }
@@ -25,8 +26,6 @@ class CheckAdmin
             return redirect('/user')->with('success', 'You are not authorized to access this page.');
         }
 
-      
         return $next($request);
     }
-    }
-
+}

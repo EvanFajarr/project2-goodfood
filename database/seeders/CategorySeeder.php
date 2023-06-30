@@ -14,7 +14,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-         category::create([
+        category::create([
             'name' => 'makanan',
             'code' => 'addjhadhakcom',
             'slug' => 'makanan',

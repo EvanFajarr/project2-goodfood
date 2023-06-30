@@ -1,12 +1,11 @@
 <?php
 
 namespace Database\Seeders;
+
 use App\Models\admin;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserTableSeeder extends Seeder
 {
@@ -28,10 +27,10 @@ class UserTableSeeder extends Seeder
             'email' => 'admin1@gmail.com',
             // 'alamat' => 'Panggungharjo,Sewon,Bantul',
             // 'no' => '0896789936333',
-            'email_verified_at' => now(), 
+            'email_verified_at' => now(),
             'password' => Hash::make('password'),
-            
-        ]); 
+
+        ]);
         $user->assignRole('1');
     }
 }

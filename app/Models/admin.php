@@ -2,15 +2,11 @@
 
 namespace App\Models;
 
-
-use App\Models\admin;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class admin extends Authenticatable
-{   
+{
     use HasRoles;
 
     protected $table = 'admin';
@@ -21,12 +17,12 @@ class admin extends Authenticatable
     //     'alamat',
     //     'no',
 
-
     // ];
 
     protected $guarded = [];
-  
-    Protected $guard_name ='admin'; // added
+
+    protected $guard_name = 'admin'; // added
+
     protected $hidden = [
         'password',
         'remember_token',
@@ -41,7 +37,6 @@ class admin extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    
     public function assignRole($role)
     {
         $this->roles()->sync([$role]);

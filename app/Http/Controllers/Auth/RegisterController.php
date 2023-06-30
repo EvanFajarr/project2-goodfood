@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-// use Illuminate\Foundation\Auth\User as Authenticatable;   
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
+// use Illuminate\Foundation\Auth\User as Authenticatable;
 // use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
@@ -50,7 +49,6 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -60,10 +58,10 @@ class RegisterController extends Controller
             // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             // 'password' => ['required', 'string', 'min:8', 'confirmed'],
             // 'name' => 'required',
-                      'email' => 'required|email|unique:users',
-                      'password' => 'required|min:8|confirmed',
-                      'alamat' => 'required',
-                      'no' => 'required|min:11',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8|confirmed',
+            'alamat' => 'required',
+            'no' => 'required|min:11',
         ]);
     }
 
@@ -73,19 +71,18 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create( $data)
+    protected function create($data)
     {
-        $user=User::create([
+        $user = User::create([
             'name' => $data['name'],
             'no' => $data['no'],
             'alamat' => $data['alamat'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-         ]);   
+        ]);
         $user->assignRole('user');
-    return $user;
 
-      
-             
+        return $user;
+
     }
 }

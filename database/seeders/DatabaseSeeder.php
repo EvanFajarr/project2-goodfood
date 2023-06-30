@@ -15,16 +15,15 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-        PermissionSeeder::class,
-    ]);
-
-    
-    $this->call([
-        RolleSeeder::class,
-    ]);
+            PermissionSeeder::class,
+        ]);
 
         $this->call([
-                CategorySeeder::class,
+            RolleSeeder::class,
+        ]);
+
+        $this->call([
+            CategorySeeder::class,
         ]);
         $this->call([
             subCategorySeeder::class,
@@ -32,6 +31,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserTableSeeder::class,
         ]);
-    
+
     }
 }

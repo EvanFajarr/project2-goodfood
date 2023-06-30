@@ -18,7 +18,7 @@ class CreateSubCategoriesTable extends Migration
             $table->unsignedBigInteger('parent_id');
             $table->string('code')->unique();
             $table->string('slug')->unique()->nullable();
-             $table->enum('status', ['post', 'pending']);
+            $table->enum('status', ['post', 'pending']);
             $table->string('name')->unique();
             $table->foreign('parent_id')->references('id')->on('category')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

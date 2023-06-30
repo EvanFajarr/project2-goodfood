@@ -1,17 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\category;
-use Illuminate\Support\Str;
 use App\Models\subCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Str;
 
 class SubCategoryController extends Controller
 {
-
-
     public function __construct()
     {
         $this->middleware('permission:Subcategory index', ['only' => ['index']]);
@@ -20,18 +18,16 @@ class SubCategoryController extends Controller
         $this->middleware('permission:Subcategory delete', ['only' => ['destroy']]);
     }
 
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-     {
+    {
 
-    $subCategory = subCategory::query();
+        $subCategory = subCategory::query();
 
-        
         $subCategory->when($request->name, function ($query) use ($request) {
             return $query->where('name', 'like', '%'.$request->name.'%');
         });
@@ -39,13 +35,11 @@ class SubCategoryController extends Controller
         $subCategory->when($request->created_at, function ($query) use ($request) {
             return $query->where('created_at', 'like', '%'.$request->created_at.'%');
         });
-       
 
-       
         $subCategory->when($request->status, function ($query) use ($request) {
             return $query->whereStatus($request->status);
         });
-        
+
         return view('subCategory.index', ['subCategory' => $subCategory->paginate(10)]);
     }
 
@@ -64,7 +58,6 @@ class SubCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -76,25 +69,24 @@ class SubCategoryController extends Controller
         Session::flash('status', $request->status);
 
         $request->validate([
-            'name'      => 'required|min:3|max:255|string|unique:sub_category',
-        //    'code'      => 'required|min:3|max:255|unique:sub_category',
-            'slug'          => 'nullable|min:3|max:255|unique:sub_category',
+            'name' => 'required|min:3|max:255|string|unique:sub_category',
+            //    'code'      => 'required|min:3|max:255|unique:sub_category',
+            'slug' => 'nullable|min:3|max:255|unique:sub_category',
             'status' => 'required',
-            'parent_id' => 'required'
-      ]);
+            'parent_id' => 'required',
+        ]);
 
+        $subCategory = [
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+            'code' => Str::random(10),
+            'status' => $request->input('status'),
+            'parent_id' => $request->input('parent_id'),
+        ];
 
+        subCategory::create($subCategory);
 
-    $subCategory = [
-        'name' => $request->input('name'),
-        'slug' => $request->input('slug'),
-        'code' => Str::random(10),
-        'status' => $request->input('status'),
-        'parent_id' => $request->input('parent_id'),
-    ];
-
-      subCategory::create($subCategory);
-      return redirect('/Subcategory')->withSuccess('You have successfully created a SubCategory!');
+        return redirect('/Subcategory')->withSuccess('You have successfully created a SubCategory!');
     }
 
     /**
@@ -125,7 +117,6 @@ class SubCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -137,10 +128,10 @@ class SubCategoryController extends Controller
         Session::flash('status', $request->status);
 
         $request->validate([
-            'name'      => 'required|min:3|max:255|string',
-            'slug'          => 'nullable|min:3|max:255',
+            'name' => 'required|min:3|max:255|string',
+            'slug' => 'nullable|min:3|max:255',
             'status' => 'required',
-            'parent_id' => 'required'
+            'parent_id' => 'required',
         ], );
 
         $subCategory = [

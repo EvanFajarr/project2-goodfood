@@ -38,14 +38,21 @@
                                   <label for="name" class="form-label">Note</label>
                                   <textarea name="note"  cols="30" rows="10" class="form-control summernote"></textarea>
                                 </div>
-        
-                              <div class="mb-3 row">
-                                <label for="item"  class="col-sm-2 col-form-label">item</label>
-                                <div class="col-sm-10"  name="item" >
-                                  <input type="text" name="item" class="form-control"
-                                   value=" @foreach ($product as $data){{ $data->product->name }},  @endforeach" readonly >    
+
+                                <div class="mb-3 row">
+                                  <label for="item" class="col-sm-2 col-form-label">Item</label>
+                                  <div class="col-sm-10">
+                                    @if ($product->isEmpty())
+                                      <input type="text" class="form-control" value="No selected product" readonly>
+                                    @else
+                                      @foreach ($product as $item)
+                                        <input type="text" class="form-control" name="item[]" value="{{ $item->product->name }}" readonly>
+                                      @endforeach
+                                    @endif
+                                  </div>
                                 </div>
-                            </div>
+                                
+                              
                             <div class="mb-3 row">
                               @php
                               $total=0
@@ -95,7 +102,7 @@
                                     @endforeach
                                   @else
                                     <div>
-                                      Your cart is empty
+                                      empty
                                     </div>
                                   @endif
                                 </div>

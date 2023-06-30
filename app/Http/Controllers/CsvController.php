@@ -1,20 +1,19 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Exports\OrderExport;
-use Illuminate\Http\Request;
-use App\Exports\ProductExport;
-use App\Imports\ProductImport;
 use App\Exports\CategoryExport;
-use App\Imports\CategoryImport;
+use App\Exports\OrderExport;
+use App\Exports\ProductExport;
 use App\Exports\SubCategoryExport;
+use App\Imports\CategoryImport;
+use App\Imports\ProductImport;
 use App\Imports\SubCategoryImport;
-use Illuminate\Support\Facades\File;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CsvController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('permission:category export', ['only' => ['export']]);
@@ -26,7 +25,6 @@ class CsvController extends Controller
         $this->middleware('permission:order export', ['only' => ['orderexport']]);
     }
 
- 
     public function export()
     {
         return Excel::download(new CategoryExport, 'category.csv');
@@ -35,9 +33,9 @@ class CsvController extends Controller
     public function import(Request $request)
     {
         Excel::import(new CategoryImport, $request->file);
+
         return back()->with('success', 'Category Imported Successfully');
     }
-
 
     public function subCategoryexport()
     {
@@ -47,10 +45,9 @@ class CsvController extends Controller
     public function subCategoryimport(Request $request)
     {
         Excel::import(new SubCategoryImport, $request->file);
+
         return back()->with('success', 'Subcategory Imported Successfully');
     }
-
-
 
     public function productexport()
     {
@@ -60,6 +57,7 @@ class CsvController extends Controller
     public function productimport(Request $request)
     {
         Excel::import(new ProductImport, $request->file);
+
         return back()->with('success', 'Product Imported Successfully');
     }
 

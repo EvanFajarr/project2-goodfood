@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\cart;
 use App\Models\order;
 use App\Models\product;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
-
-
     public function __construct()
     {
         $this->middleware('permission:order index', ['only' => ['order']]);
@@ -22,12 +19,22 @@ class OrderController extends Controller
         $this->middleware('permission:order delete', ['only' => ['destroy']]);
     }
 
+    // public function index()
+    // {
+    //     return view('order.index', [
+
+    //         $userId = Auth::user()->id,
+    //         'product' => cart::where('user_id', $userId)->get(),
+    //     ]);
+    // }
+
     public function index()
     {
-        return view('order.index', [
+        $userId = Auth::user()->id;
+        $product = cart::where('user_id', $userId)->where('selected', 1)->get();
 
-            $userId = Auth::user()->id,
-            'product' => cart::where('user_id', $userId)->get(),
+        return view('order.index', [
+            'product' => $product,
         ]);
     }
 
@@ -67,14 +74,14 @@ class OrderController extends Controller
         return view('checkout')->with('data', $data)->with('session', $session)->with('success', 'Berhasil Transaksi');
     }
 
-
-
     public function user()
     {
         $userId = Auth::user()->id;
         $order = order::where('user_id', $userId)->get();
+
         return view('home.order')->with('order', $order);
     }
+
     public function edit($id)
     {
         $order = order::where('id', $id)->first();
@@ -108,42 +115,35 @@ class OrderController extends Controller
         return back()->with('success', 'Berhasil hapus order');
     }
 
-
-    
     public function admin(Request $request)
-    { 
-        
-        
+    {
+
         $order = order::query();
 
-        
         $order->when($request->name, function ($query) use ($request) {
             return $query->where('name', 'like', '%'.$request->name.'%');
         });
 
-
         $order->when($request->created_at, function ($query) use ($request) {
             return $query->where('created_at', 'like', '%'.$request->created_at.'%');
         });
-       
 
-       
         $order->when($request->status, function ($query) use ($request) {
             return $query->whereStatus($request->status);
         });
-        
+
         return view('order.tampil', ['order' => $order->paginate(10)]);
 
     }
 
-
-    public function delete($id){
+    public function delete($id)
+    {
         order::where('id', $id)->delete();
 
         return back()->with('success', 'Berhasil hapus order');
     }
 
-    public function editOrder ($code)
+    public function editOrder($code)
     {
         $order = order::where('code', $code)->first();
 

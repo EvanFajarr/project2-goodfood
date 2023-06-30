@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\subCategory;
-use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
-
+use Illuminate\Database\Eloquent\Model;
 
 class category extends Model
 {
-
     use Sluggable;
-    protected $fillable = ['name','code','slug','status'];
+
+    protected $fillable = ['name', 'code', 'slug', 'status'];
 
     protected $table =
     'category';
@@ -20,15 +18,13 @@ class category extends Model
     {
         return [
             'slug' => [
-                'source' => 'name'
-            ]
+                'source' => 'name',
+            ],
         ];
     }
-
 
     public function subCategory()
     {
         return $this->belongsTo(subCategory::class);
     }
-    
 }

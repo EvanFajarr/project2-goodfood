@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateImagesTable extends Migration
+class AddSelectedToCarts extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +13,8 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('image', function (Blueprint $table) {
-            $table->id();
-            $table->string('image');
-            $table->foreignIdFor(product::class)->onDelete('cascade')->onUpdate('cascade');
-            $table->timestamps();
+        Schema::table('cart', function (Blueprint $table) {
+            $table->boolean('selected')->default(false);
         });
     }
 
@@ -29,6 +25,8 @@ class CreateImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('image');
+        Schema::table('cart', function (Blueprint $table) {
+            $table->dropColumn('selected');
+        });
     }
 }

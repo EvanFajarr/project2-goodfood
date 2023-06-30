@@ -1,42 +1,36 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\image;
 use App\Models\product;
 use App\Models\subCategory;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-     public function __construct()
-     {
-         $this->middleware('permission:product index', ['only' => ['index']]);
-         $this->middleware('permission:product create', ['only' => ['create', 'store']]);
-         $this->middleware('permission:product edit', ['only' => ['edit', 'update']]);
-         $this->middleware('permission:product delete', ['only' => ['destroy']]);
-         $this->middleware('permission:view image', ['only' => ['images']]);
-         $this->middleware('permission:create image', ['only' => ['addimage']]);
-         $this->middleware('permission:delete image', ['only' => ['deleteimage']]);
-     }
- 
+    public function __construct()
+    {
+        $this->middleware('permission:product index', ['only' => ['index']]);
+        $this->middleware('permission:product create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:product edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:product delete', ['only' => ['destroy']]);
+        $this->middleware('permission:view image', ['only' => ['images']]);
+        $this->middleware('permission:create image', ['only' => ['addimage']]);
+        $this->middleware('permission:delete image', ['only' => ['deleteimage']]);
+    }
 
     public function index(Request $request)
     {
         $product = product::query();
 
-        
         $product->when($request->name, function ($query) use ($request) {
             return $query->where('name', 'like', '%'.$request->name.'%');
         });
@@ -48,17 +42,13 @@ class ProductController extends Controller
         $product->when($request->created_at, function ($query) use ($request) {
             return $query->where('created_at', 'like', '%'.$request->created_at.'%');
         });
-       
 
-       
         $product->when($request->status, function ($query) use ($request) {
             return $query->whereStatus($request->status);
         });
-        
+
         return view('product.index', ['product' => $product->paginate(10)]);
 
-
-     
     }
 
     /**
@@ -69,6 +59,7 @@ class ProductController extends Controller
     public function create()
     {
         $data = subCategory::all();
+
         return view('product.create', compact('data'));
     }
 
@@ -81,18 +72,17 @@ class ProductController extends Controller
     public function store(Request $req)
     {
 
-
-         $req->validate([
+        $req->validate([
             'harga' => 'required|numeric',
             'name' => 'required|unique:product',
             'category_id' => 'required',
             // 'code'      => 'required|min:3|max:255|unique:product',
-            'stok'      => 'required|min:1',
-            'slug'          => 'nullable|min:3|max:255|unique:product',
-            'discount'          => 'nullable|min:2|max:255',
-            'desc'          => 'nullable',
+            'stok' => 'required|min:1',
+            'slug' => 'nullable|min:3|max:255|unique:product',
+            'discount' => 'nullable|min:2|max:255',
+            'desc' => 'nullable',
             'status' => 'required',
-             'foto' => 'required|image|file|max:10000',
+            'foto' => 'required|image|file|max:10000',
         ]);
 
         $foto_file = $req->file('foto');
@@ -111,40 +101,35 @@ class ProductController extends Controller
             'slug' => $req->input('slug'),
             'status' => $req->input('status'),
             'code' => Str::random(10),
-          
-        ];
-      
 
+        ];
 
         $new_product = product::create($product);
-     
-        if($req->has('images')){
-            foreach($req->file('images')as $image){
-                $imageName = $product['name'].'-image-'.time().rand(1,1000).'.'.$image->extension();
-                $image->move(public_path('product_images'),$imageName);
+
+        if ($req->has('images')) {
+            foreach ($req->file('images') as $image) {
+                $imageName = $product['name'].'-image-'.time().rand(1, 1000).'.'.$image->extension();
+                $image->move(public_path('product_images'), $imageName);
                 image::create([
-                    'product_id'=>$new_product->id,
-                    'image'=>$imageName
+                    'product_id' => $new_product->id,
+                    'image' => $imageName,
                 ]);
             }
         }
-       
-        return back()->with('success','Added');
-    
-}
 
+        return back()->with('success', 'Added');
 
-public function calculateDiscount(Request $request)
-{
-    $harga = $request->input('harga');
-    $discount = $request->input('discount');
+    }
 
-    $discountedPrice = $harga - ($harga * ($discount / 100));
+    public function calculateDiscount(Request $request)
+    {
+        $harga = $request->input('harga');
+        $discount = $request->input('discount');
 
-    return view('product.index', ['ha$harga' => $harga, 'discount' => $discount, 'discountedPrice' => $discountedPrice]);
-}
+        $discountedPrice = $harga - ($harga * ($discount / 100));
 
-
+        return view('product.index', ['ha$harga' => $harga, 'discount' => $discount, 'discountedPrice' => $discountedPrice]);
+    }
 
     /**
      * Display the specified resource.
@@ -167,34 +152,29 @@ public function calculateDiscount(Request $request)
     {
         $data = subCategory::all();
         $product = product::where('id', $id)->first();
+
         return view('product.edit', compact('data', 'product'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
 
-       $request->validate([
+        $request->validate([
             'harga' => 'required|numeric',
             'name' => 'required',
             'category_id' => 'required',
-            'stok'      => 'required|min:1',
-            'discount'          => 'nullable|min:2|max:255',
-            'desc'          => 'nullable',
+            'stok' => 'required|min:1',
+            'discount' => 'nullable|min:2|max:255',
+            'desc' => 'nullable',
             'status' => 'required',
-           
-        ] );
 
-        
-
-     
-
+        ]);
 
         $product = [
             'harga' => $request->input('harga'),
@@ -226,7 +206,7 @@ public function calculateDiscount(Request $request)
         $new_product = product::where('id', $id)->update($product);
 
         return redirect('/product')->with('success', 'Berhasil melakukan update data');
-          
+
     }
 
     /**
@@ -235,52 +215,58 @@ public function calculateDiscount(Request $request)
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
-
-     public function images($id){
+    public function images($id)
+    {
         $product = product::find($id);
-        if(!$product) abort(404);
+        if (! $product) {
+            abort(404);
+        }
         $images = $product->image;
         // dd($images);
-        return view('image.index',compact('product','images'));
-     
+        return view('image.index', compact('product', 'images'));
+
     }
 
     public function destroy($code)
     {
         $product_foto = product::where('code', $code)->first();
-        File::delete(public_path('foto') . '/' . $product_foto->foto);
-    
+        File::delete(public_path('foto').'/'.$product_foto->foto);
+
         product::where('code', $code)->delete();
+
         return redirect('/product')->with('success', 'Berhasil hapus data');
     }
 
-    public function deleteimage($id){
+    public function deleteimage($id)
+    {
         $image = image::find($id);
-        if(!$image) abort(404);
-      unlink(public_path('product_images/'.$image->image));
-      $image->delete();
-      return back()->with('success','delete');
-        
-   }
+        if (! $image) {
+            abort(404);
+        }
+        unlink(public_path('product_images/'.$image->image));
+        $image->delete();
 
+        return back()->with('success', 'delete');
 
-public function addimage(Request $req,$id){
+    }
+
+    public function addimage(Request $req, $id)
+    {
         $product = product::find($id);
-        if(!$product) abort(404);
-        if($req->has('images')){
-            foreach($req->file('images')as $image){
-                $imageName = $product['name'].'-image-'.time().rand(1,1000).'.'.$image->extension();
-                $image->move(public_path('product_images'),$imageName);
+        if (! $product) {
+            abort(404);
+        }
+        if ($req->has('images')) {
+            foreach ($req->file('images') as $image) {
+                $imageName = $product['name'].'-image-'.time().rand(1, 1000).'.'.$image->extension();
+                $image->move(public_path('product_images'), $imageName);
                 image::create([
-                    'product_id'=>$product->id,
-                    'image'=>$imageName
+                    'product_id' => $product->id,
+                    'image' => $imageName,
                 ]);
             }
         }
-        return back()->with('success','Added');
+
+        return back()->with('success', 'Added');
+    }
 }
-
-}
-
-
